@@ -1,0 +1,186 @@
+classDiagram
+    %% Capa de Dominio (Domain)
+    namespace Domain_Layer {
+        class Entity {
+            <<Abstract>>
+            +Id id
+            +equals(Entity other) bool
+        }
+        
+        class Patient {
+            +Dni dni
+            +Name name
+            +LastName lastName
+            +BirthDate birthDate
+            +Gender gender
+            +Phone phone
+            +EmergencyContact emergencyContact
+            +Address address
+            +SecondaryPhone secondaryPhone
+            +Email email
+            +City city
+            +Country country
+            +HasHealthInsurance hasHealthInsurance
+            +HealthInsuranceName healthInsuranceName
+            +HealthInsuranceNumber healthInsuranceNumber
+            +MedicalObservations medicalObservations
+            +Active active
+            +IsActive isActive
+        }
+
+        class Medical_record {
+            +PatientId patientId
+            +Date date
+            +Description description
+            +IsActive isActive
+        }
+
+        class Log {
+            +Timestamp timestamp
+            +User user
+            +Action action
+        }
+
+        class View {
+            <<Enum>>
+            +MAIN_WINDOW
+            +PATIENT_DETAIL
+            +PATIENT_REGISTRATION
+            +MEDICAL_RECORD_DETAIL
+            +NEW_ENTRY
+            +LOGS_WINDOW
+            +ALL_PATIENTS
+        }
+    }
+
+    Entity <|-- Patient
+    Entity <|-- Medical_record
+    Entity <|-- Log
+
+    %% Capa de Aplicación (Application / Services)
+    namespace Application_Layer {
+        class Patient_service {
+            -IPatientRepository _repository
+            +register_patient(Patient patient)
+            +get_patient_by_id(Id id) Patient
+            +search_patients(string query) List~Patient~
+            +delete_patient(Id id)
+        }
+
+        class Medical_record_service {
+            -IMedicalRecordRepository _repository
+            +add_record(Medical_record record)
+            +get_records_by_patient(Id patientId) List~Medical_record~
+            +delete_record(Id id)
+        }
+
+        class Log_service {
+            -ILogRepository _repository
+            +register_log(Log log)
+            +get_all_logs() List~Log~
+        }
+    }
+
+    %% Capa de Infraestructura (Infrastructure - DB & Repositories)
+    namespace Infrastructure_Repositories {
+        class Sqlite_database_handler {
+            -string path
+            -Connection connection
+            +connect()
+            +execute_query(string query, list params)
+        }
+
+        class Sqlite_patient_repository {
+            -Sqlite_database_handler _db
+            +save(Patient patient)
+            +find_by_id(Id id) Patient
+            +search(string query) List~Patient~
+            +delete(Id id)
+        }
+
+        class Sqlite_medical_record_repository {
+            -Sqlite_database_handler _db
+            +save(Medical_record record)
+            +find_by_patient_id(Id patientId) List~Medical_record~
+            +delete(Id id)
+        }
+
+        class Sqlite_log_repository {
+            -Sqlite_database_handler _db
+            +save(Log log)
+            +get_all() List~Log~
+        }
+    }
+
+    Patient_service --> Sqlite_patient_repository : usa
+    Medical_record_service --> Sqlite_medical_record_repository : usa
+    Log_service --> Sqlite_log_repository : usa
+
+    Sqlite_patient_repository --> Sqlite_database_handler : usa
+    Sqlite_medical_record_repository --> Sqlite_database_handler : usa
+    Sqlite_log_repository --> Sqlite_database_handler : usa
+
+    %% Capa de Presentación (GUI & Handlers)
+    namespace Presentation_Layer {
+        class Graphic_user_interface {
+            +Tk root
+            +Notebook notebook
+            +dict views
+            +set_view(View view_name)
+            +get_selected_patient_id() int
+            +get_data_from_patient_creation_form() dict
+        }
+
+        class Graphic_user_interface_handler {
+            -Graphic_user_interface _gui
+            -Patient_service _patient_service
+            -Medical_record_service _record_service
+            -Log_service _log_service
+            +handle_patient_search()
+            +handle_patient_creation()
+            +handle_medical_record_creation()
+        }
+
+        class General_view {
+            -Treeview tree
+            -Entry search_entry
+            +_setup_ui()
+            +_on_search()
+        }
+
+        class Detail_view {
+            -Treeview tree_history
+            -Label lbl_fullname
+            +_setup_ui()
+        }
+
+        class Registration_view {
+            -dict inputs
+            +_setup_ui()
+            +_on_save()
+            +get_data() dict
+        }
+
+        class Record_creation_view {
+            -Text text_area
+            +_setup_ui()
+            +_on_save()
+            +get_data() dict
+        }
+
+        class Log_view {
+            -Treeview tree_logs
+            +_setup_ui()
+        }
+    }
+
+    Graphic_user_interface_handler --> Graphic_user_interface : manipula y escucha
+    Graphic_user_interface_handler --> Patient_service : delega lógica
+    Graphic_user_interface_handler --> Medical_record_service : delega lógica
+    Graphic_user_interface_handler --> Log_service : delega lógica
+
+    Graphic_user_interface *-- General_view : contiene
+    Graphic_user_interface *-- Detail_view : contiene
+    Graphic_user_interface *-- Registration_view : contiene
+    Graphic_user_interface *-- Record_creation_view : contiene
+    Graphic_user_interface *-- Log_view : contiene

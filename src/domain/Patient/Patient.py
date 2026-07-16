@@ -33,26 +33,26 @@ class Patient(Entity):
         self._birth_date = Date(birth_date, "Fecha de nacimiento", allow_future=False)
         self._gender = Gender(gender)
         
-        # Campos de contacto[cite: 1]
+        # Campos de contacto
         self._phone = Phone(phone, "Teléfono", required=True)
         self._secondary_phone = Phone(secondary_phone, "Teléfono secundario", required=False)
         self._email = Email(email)
         self._emergency_contact = Text_with_range(emergency_contact, "Contacto de emergencia", 1, 100, required=True)
         
-        # Ubicación[cite: 1]
+        # Ubicación
         self._address = Text_with_range(address, "Dirección", 0, 100, required=False)
         self._city = Text_with_range(city, "Ciudad", 2, 50, required=True)
         self._country = Text_with_range(country, "País", 2, 50, required=True)
         
-        # Obra Social condicional[cite: 1]
+        # Obra Social condicional
         self._health_insurance = Health_insurance(
             has_health_insurance, health_insurance_name, health_insurance_number
         )
         
-        # Observaciones[cite: 1]
+        # Observaciones
         self._medical_observations = str(medical_observations).strip() if medical_observations else ""
 
-    # --- Getters que exponen valores planos/primitivos para compatibilidad externa ---
+    # --- Getters que exponen valores planos ---
     @property
     def name(self): return self._name.value
     

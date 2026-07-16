@@ -12,7 +12,7 @@ class Log(Entity):
         
         self._timestamp = Datetime(timestamp)
         
-        # Operaciones limitadas a las definidas por el SRS
+        # Operaciones limitadas
         allowed_operations = [
             "Alta Paciente", 
             "Modificación Paciente", 

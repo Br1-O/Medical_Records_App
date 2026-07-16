@@ -18,10 +18,10 @@ class Medical_record(Entity):
         if self._patient_id.value is None:
             raise ValueError("El 'patient_id' es obligatorio en el historial médico.")
             
-        # El SRS especifica formato con hora para la evolución médica
+        # Formato con hora para la evolución médica
         self._date = Datetime(date)
         
-        # Textos de evolución limitados por el SRS
+        # Textos de entrada en historia clinica
         self._consultation_reason = Text_with_range(consultation_reason, "Motivo de consulta", 1, 500, required=True)
         self._diagnosis = Text_with_range(diagnosis, "Diagnóstico", 1, 1000, required=True)
         self._treatment_evolution = Text_with_range(treatment_evolution, "Evolución/Tratamiento realizado", 1, 5000, required=True) # Sin límite práctico pero estricto

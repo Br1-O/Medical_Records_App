@@ -10,10 +10,10 @@ from infrastructure.gui import Graphic_user_interface, Graphic_user_interface_ha
 
 class App_launcher:
     def __init__(self):
-        # 1. Obtenemos el directorio donde vive "main.py" (que es "src/")
+        # directorio donde vive "main.py" (que es "src/")
         base_dir = os.path.dirname(os.path.abspath(__file__))
         
-        # 2. Unimos ese directorio directamente con el nombre de tu base de datos
+        # Une ese directorio directamente con base de datos
         db_path = os.path.join(base_dir, "saca_muela.db")
         self._db_handler = Sqlite_database_handler(db_path)
 
