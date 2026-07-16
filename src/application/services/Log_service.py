@@ -1,6 +1,5 @@
 from typing import List
-from domain.Log.Log import Log
-from domain.Log.ILog_repository import ILog_repository
+from domain.Log import Log, ILog_repository
 from domain.Entity import Entity
 
 class Log_service:

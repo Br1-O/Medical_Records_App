@@ -1,6 +1,6 @@
 from datetime import datetime
 import re
-from Value_objects import Value_object
+from .Value_object import Value_object
 
 class Date(Value_object):
     def __init__(self, value, field_name="Fecha", allow_future=False):

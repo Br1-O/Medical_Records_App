@@ -1,4 +1,4 @@
-from Value_object import Value_object;
+from .Value_object import Value_object;
 
 class Id(Value_object):
     def __init__(self, value):

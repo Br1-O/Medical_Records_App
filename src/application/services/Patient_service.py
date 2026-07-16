@@ -1,6 +1,5 @@
 from typing import List, Optional
-from domain.Patient.Patient import Patient
-from domain.Patient.IPatient_repository import IPatient_repository
+from domain.Patient import Patient, IPatient_repository
 
 class Patient_service:
     

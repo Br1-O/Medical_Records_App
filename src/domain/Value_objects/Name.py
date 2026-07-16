@@ -1,7 +1,6 @@
 import re
-from Value_objects import Value_object
-from Text_with_range import Text_with_range
-
+from .Value_object import Value_object
+from .Text_with_range import Text_with_range
 
 class Name(Value_object):
     def __init__(self, value, field_name="Nombre"):

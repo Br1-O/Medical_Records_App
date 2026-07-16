@@ -1,6 +1,6 @@
 from abc import ABC
 
-from Value_objects import Id
+from domain.Value_objects import Id
 
 class Entity(ABC):
     def __init__(self, id=None, is_active=True):

@@ -1,5 +1,8 @@
-from Entity import Entity
-from Value_objects import Date, Dni, Email, Gender, Health_insurance, Last_name, Name, Phone, Text_with_range;
+from domain.Entity import Entity
+from domain.Value_objects import (
+    Date, Dni, Email, Gender, Health_insurance, 
+    Last_name, Name, Phone, Text_with_range
+)
 
 class Patient(Entity):
     def __init__(self, 

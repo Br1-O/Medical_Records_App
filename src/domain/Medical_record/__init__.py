@@ -1,0 +1,2 @@
+from .Medical_record import Medical_record
+from .IMedical_record_repository import IMedical_record_repository

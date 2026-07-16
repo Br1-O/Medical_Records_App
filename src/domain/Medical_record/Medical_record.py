@@ -1,5 +1,5 @@
-from Entity import Entity
-from Value_objects import Id, Datetime, Text_with_range;
+from domain.Entity import Entity
+from domain.Value_objects import Id, Datetime, Text_with_range;
 
 class Medical_record(Entity):
     def __init__(self, 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from domain.Log.Log import Log
+from domain.Log import Log
 from domain.Entity import Entity
 
 class ILog_repository(ABC):

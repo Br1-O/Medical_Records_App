@@ -1,6 +1,5 @@
 from typing import List, Optional
-from domain.Medical_record.Medical_record import Medical_record
-from domain.Medical_record.IMedical_record_repository import IMedical_record_repository
+from domain.Medical_record import Medical_record, IMedical_record_repository
 
 class Medical_record_service:
 

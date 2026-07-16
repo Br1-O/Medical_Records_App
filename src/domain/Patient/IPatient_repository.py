@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from Patient import Patient
+from domain.Patient import Patient
 
 class IPatient_repository(ABC):
     

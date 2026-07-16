@@ -1,5 +1,5 @@
-from Entity import Entity
-from Value_objects import Datetime, Id;
+from domain.Entity import Entity
+from domain.Value_objects import Datetime, Id;
 
 class Log(Entity):
     def __init__(self, 
