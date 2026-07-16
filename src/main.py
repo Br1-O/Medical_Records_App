@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from infrastructure.database.database_handler import SQLiteDatabaseHandler
+from src.infrastructure.database.Sqlite_database_handler import SQLiteDatabaseHandler
 
 
 class AppLauncher:
