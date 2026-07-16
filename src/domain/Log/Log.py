@@ -17,6 +17,7 @@ class Log(Entity):
             "Alta Paciente", 
             "Modificación Paciente", 
             "Baja Paciente", 
+            "Reactivacion Paciente",
             "Alta Historial", 
             "Anulación"
         ]

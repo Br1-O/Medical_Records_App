@@ -85,7 +85,7 @@ class Sqlite_patient_repository(IPatient_repository):
                 phone = ?, emergency_contact = ?, address = ?, secondary_phone = ?,
                 email = ?, city = ?, country = ?, has_health_insurance = ?,
                 health_insurance_name = ?, health_insurance_number = ?,
-                medical_observations = ?
+                medical_observations = ?, is_active = ?
             WHERE id = ?
         """
         params = [
@@ -105,6 +105,7 @@ class Sqlite_patient_repository(IPatient_repository):
             updated_patient.health_insurance_name,
             updated_patient.health_insurance_number,
             updated_patient.medical_observations,
+            1 if updated_patient.isActive else 0,
             updated_patient.id
         ]
         return self._db.execute_command(query, params)

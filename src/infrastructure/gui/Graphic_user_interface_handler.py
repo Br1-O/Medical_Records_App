@@ -3,6 +3,7 @@ from datetime import datetime
 from infrastructure.gui import Graphic_user_interface
 from application.services import Patient_service, Medical_record_service, Log_service
 from domain.Enums import View
+from domain.Enums.Operation import Operation
 from domain.Patient import Patient
 from domain.Medical_record import Medical_record
 from domain.Log import Log
@@ -37,6 +38,7 @@ class Graphic_user_interface_handler:
         self._graphic_user_interface.on_log_double_click = self._on_log_double_click_handler
         self._graphic_user_interface.on_patient_detail_view = self._on_patient_detail_view_handler
         self._graphic_user_interface.on_edit_patient = self._on_edit_patient_handler
+        self._graphic_user_interface.on_patient_reactivate = self._on_patient_reactivate_handler
         self._graphic_user_interface.on_medical_record_detail_view = self._on_medical_record_detail_view_handler
 
     def _log_operation(self, operation: str, affected_record_id: int) -> None:
@@ -80,6 +82,7 @@ class Graphic_user_interface_handler:
                     detail_view.lbl_insurance.configure(text=f"Obra Social: {patient.health_insurance_name or '-'}")
                     detail_view.lbl_insurance_num.configure(text=f"Nro Obra Social: {patient.health_insurance_number or '-'}")
                     detail_view.lbl_status.configure(text=f"Estado: {'Activo' if patient.isActive else 'Inactivo'}")
+                    detail_view.set_active_status(patient.isActive)
                 records = self._medical_record_service.get_all_active_medical_records_by_dni_use_case(dni)
                 self._graphic_user_interface.set_all_medical_records_data_for_display(records)
         except Exception as e:
@@ -235,6 +238,48 @@ class Graphic_user_interface_handler:
 
         except Exception as e:
             messagebox.showerror("Error de Base de Datos", f"No se pudo eliminar al paciente: {str(e)}")
+
+    def _on_patient_reactivate_handler(self) -> None:
+        try:
+            dni = self._current_patient_dni
+            if not dni:
+                dni = self._graphic_user_interface.get_selected_patient_dni()
+            if not dni:
+                return
+
+            patient = self._patient_service.get_patient_by_dni_use_case(dni)
+            if not patient:
+                messagebox.showerror("Error", "No se encontro el paciente.")
+                return
+
+            reactivated = Patient(
+                name=patient.name,
+                last_name=patient.last_name,
+                dni=patient.dni,
+                birth_date=patient.birth_date or "",
+                gender=patient.gender or "Otro",
+                phone=patient.phone or "",
+                emergency_contact=patient.emergency_contact or "",
+                has_health_insurance=patient.has_health_insurance,
+                health_insurance_name=patient.health_insurance_name or "",
+                health_insurance_number=patient.health_insurance_number or "",
+                is_active=True,
+                id=patient.id
+            )
+
+            success = self._patient_service.update_patient_use_case(reactivated)
+            if success:
+                self._log_operation("Reactivacion Paciente", patient.id)
+                messagebox.showinfo("Operacion Exitosa", "El paciente ha sido reactivado.")
+                detail_view = self._graphic_user_interface.views[View.PATIENT_DETAIL]
+                detail_view.lbl_status.configure(text="Estado: Activo")
+                detail_view.set_active_status(True)
+                self._on_patient_search_handler()
+            else:
+                messagebox.showerror("Error", "No se pudo reactivar el paciente.")
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al reactivar paciente: {str(e)}")
 
     # --- Handlers de Historias Clínicas (Consultas) ---
     def _on_medical_record_search_handler(self) -> None:
